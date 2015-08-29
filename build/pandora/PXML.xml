@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PXML xmlns="http://openpandora.org/namespaces/PXML" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="PXML_schema.xsd">
+
+  <package id="opencatacomb.pickle">
+  
+    <author name="Pickle" website="http://pickle.gp2x.de"/><!--Optional email and website, name required--> 
+    <version major="1" minor="0" release="0" build="0" type="release" /><!--This programs version-->
+    
+    <titles>
+      <title lang="en_US">The Catacomb 1 and 2</title>  
+    </titles>
+    
+    <descriptions>
+      <description lang="en_US">Port of the original 2D classic.</description>  
+    </descriptions>
+    
+  </package>
+
+  <application id="opencatacomb.pickle" appdata="opencatacomb">
+ 
+    <exec command="run.sh"/>
+    <author name="Flat Rock Software / Scott R. Smith" website="http://sourceforge.net/p/opencatacomb/readme.txt"/><!--Optional email and website, name required-->  
+    <version major="1" minor="0" release="0" build="0"/><!--This programs version-->
+    
+    <titles>
+      <title lang="en_US">The Catacomb 1 and 2</title>  
+    </titles>
+    <title lang="en_US">The Catacomb 1 and 2</title> <!-- pre HF6 compatibility -->
+    
+    <descriptions>
+      <description lang="en_US">Port of the original 2D classic.</description>  
+    </descriptions>    
+  
+    <licenses>
+      <license name="GPLv2" url="" sourcecodeurl=""/>
+    </licenses>
+
+    <previewpics>
+      <pic src="opencatacomb-pvw.png"/>
+    </previewpics>
+  
+    <info name="The Catacomb Setup" type="text/html" src="readme.txt"/>  
+ 
+    <categories>
+      <category name="Game"><!--category like "Games", "Graphics", "Internet" etc-->
+        <subcategory name="ActionGame"/><!--subcategory, like "ActionGame", http://standards.freedesktop.org/menu-spec/latest/apa.html-->
+      </category>
+    </categories>
+ 
+  </application>
+  
+</PXML>
+

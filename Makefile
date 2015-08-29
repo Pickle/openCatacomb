@@ -3,8 +3,8 @@
 PROGRAM = opencatacomb
 
 # Build type
-BUILDTYPE = debug
-#BUILDTYPE = release
+#BUILDTYPE = debug
+BUILDTYPE = release
 
 # Compiler flags
 BASE_FLAGS   = -g -Wall -Wextra -O3 -fsigned-char

@@ -45,9 +45,9 @@ extern "C" {
 #define GET_EGA_COLOR(X) xga_palette[X]
 
 #if defined(USE_EGL_RAW) || defined(USE_EGL_SDL) || defined(USE_EGL_RPI)
-#define SCREEN_FLAGS    SDL_SWSURFACE|SDL_FULLSCREEN
+#define SCREEN_FLAGS    SDL_SWSURFACE /*|SDL_FULLSCREEN*/
 #else
-#define SCREEN_FLAGS    SDL_OPENGL|SDL_FULLSCREEN
+#define SCREEN_FLAGS    SDL_OPENGL /*|SDL_FULLSCREEN*/
 #endif
 
 extern uint16_t tiles[TILEVIEW_W][TILEVIEW_H];
