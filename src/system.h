@@ -31,8 +31,13 @@ extern "C" {
 
 #define BASE_W          320
 #define BASE_H          200
+#if defined(PANDORA)
 #define SCREEN_W        800
 #define SCREEN_H        480
+#else
+#define SCREEN_W        320
+#define SCREEN_H        240
+#endif
 #define SCALE           1
 
 #define TILE_W          8

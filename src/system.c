@@ -68,7 +68,7 @@ void ParseArgs( int32_t argc, char *argv[] )
         if ((strstr( argv[i], "--ver" ) != NULL) || (strstr( argv[i], "-V") != NULL))
         {
             printf( "openCatacomb\n" );
-            printf( "Copyright 2014 Scott Smith\n" );
+            printf( "Copyright 2015 Scott Smith\n" );
             printf( "Version %f\n", VERSION );
             printf( "\n" );
             printf( "based on\n" );

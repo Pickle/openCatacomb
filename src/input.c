@@ -347,36 +347,7 @@ void DefaultMaps( void )
     inputmaps[input_pause].support    = (1<<catacomb1)|(1<<catacomb2);
     inputmaps[input_quit].support     = (1<<catacomb1)|(1<<catacomb2);
 
-#if defined(PANDORA)
-    SetKey( input_up,       SDLK_UP );
-    SetKey( input_down,     SDLK_DOWN );
-    SetKey( input_left,     SDLK_LEFT );
-    SetKey( input_right,    SDLK_RIGHT );
-    SetKey( input_select,   SDLK_RETURN );
-    SetKey( input_back,     SDLK_ESCAPE );
-    SetKey( input_shoot,    SDLK_HOME );
-    SetKey( input_strafe,   SDLK_PAGEDOWN );
-    SetKey( input_potion,   SDLK_END );
-    SetKey( input_bolt,     SDLK_PAGEUP );
-    SetKey( input_nuke,     SDLK_RCTRL );
-    SetKey( input_cheat,    SDLK_q );
-    SetKey( input_help,     SDLK_1 );
-#if defined(CATACOMB1)
-    SetKey( input_sound,    SDLK_2 );
-    SetKey( input_control,  SDLK_FIRST );
-    SetKey( input_reset,    SDLK_3 );
-    SetKey( input_save,     SDLK_FIRST );
-    SetKey( input_load,     SDLK_FIRST );
-#else
-    SetKey( input_sound,    SDLK_FIRST );
-    SetKey( input_control,  SDLK_2 );
-    SetKey( input_reset,    SDLK_3 );
-    SetKey( input_save,     SDLK_4 );
-    SetKey( input_load,     SDLK_5 );
-#endif /* CATACOMB1 */
-    SetKey( input_pause,    SDLK_9 );
-    SetKey( input_quit,     SDLK_0 );
-#else
+    /* Default Mapping */
     SetKey( input_up,       SDLK_UP );
     SetKey( input_down,     SDLK_DOWN );
     SetKey( input_left,     SDLK_LEFT );
@@ -405,7 +376,56 @@ void DefaultMaps( void )
 #endif /* CATACOMB1 */
     SetKey( input_pause,    SDLK_F9 );
     SetKey( input_quit,     SDLK_F10 );
-#endif /* PANDORA */
+
+    /* Custom Overides */
+#if defined(PANDORA)
+    SetKey( input_up,       SDLK_UP );
+    SetKey( input_down,     SDLK_DOWN );
+    SetKey( input_left,     SDLK_LEFT );
+    SetKey( input_right,    SDLK_RIGHT );
+    SetKey( input_select,   SDLK_RETURN );
+    SetKey( input_back,     SDLK_ESCAPE );
+    SetKey( input_shoot,    SDLK_HOME );
+    SetKey( input_strafe,   SDLK_PAGEDOWN );
+    SetKey( input_potion,   SDLK_END );
+    SetKey( input_bolt,     SDLK_PAGEUP );
+    SetKey( input_nuke,     SDLK_RCTRL );
+    SetKey( input_cheat,    SDLK_q );
+    SetKey( input_help,     SDLK_1 );
+#if defined(CATACOMB1)
+    SetKey( input_sound,    SDLK_2 );
+    SetKey( input_reset,    SDLK_3 );
+#else
+    SetKey( input_control,  SDLK_2 );
+    SetKey( input_reset,    SDLK_3 );
+    SetKey( input_save,     SDLK_4 );
+    SetKey( input_load,     SDLK_5 );
+#endif /* CATACOMB1 */
+    SetKey( input_pause,    SDLK_9 );
+    SetKey( input_quit,     SDLK_0 );
+
+#elif defined(GCW)
+    SetKey( input_up,       SDLK_UP );
+    SetKey( input_down,     SDLK_DOWN );
+    SetKey( input_left,     SDLK_LEFT );
+    SetKey( input_right,    SDLK_RIGHT );
+    SetKey( input_select,   SDLK_RETURN );
+    SetKey( input_back,     SDLK_ESCAPE );
+    SetKey( input_shoot,    SDLK_LCTRL );
+    SetKey( input_strafe,   SDLK_FIRST );
+    SetKey( input_potion,   SDLK_SPACE );
+    SetKey( input_bolt,     SDLK_LSHIFT );
+    SetKey( input_nuke,     SDLK_LALT );
+    SetKey( input_cheat,    SDLK_q );
+    SetKey( input_help,     SDLK_1 );
+    SetKey( input_pause,    SDLK_9 );
+    SetKey( input_quit,     SDLK_ESCAPE );
+
+#if !defined(CATACOMB1)
+    SetKey( input_save,     SDLK_TAB );
+    SetKey( input_load,     SDLK_BACKSPACE );
+#endif
+#endif
 }
 
 void SetKey( uint8_t index, SDLKey sym )

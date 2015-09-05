@@ -49,7 +49,7 @@ uint8_t ScanPath( const string& path, uint32_t types, vector<string>& list )
 
     if ((dp = opendir( path.c_str() )) == NULL)
     {
-        printf( "Failed to open dir path %s\n", path.c_str() );
+        printf( "Failed to open dir path '%s' code: '%d'\n", path.c_str(), errno );
         return 1;
     }
 
@@ -91,6 +91,11 @@ int32_t RunFrontend( void )
     uint8_t keys;
     uint32_t y;
     int32_t result = 0;
+#if defined(GCW)
+    string scanpath = "/media/sdcard/catacomb/";
+#else
+    string scanpath = "./";
+#endif
 
     vector< md5list_t > md5list;
     vector< string > dirs;
@@ -104,7 +109,7 @@ int32_t RunFrontend( void )
     LoadChecksums( "md5checksums.txt", md5list );
 
     /* Read directories */
-    ScanPath( ".", S_IFDIR, dirs );
+    ScanPath( scanpath, S_IFDIR, dirs );
 
     /* Read files */
     files.resize( dirs.size() );
@@ -112,10 +117,10 @@ int32_t RunFrontend( void )
 
     for (i=dirs.size()-1; i>=0; i--)
     {
-        ScanPath( dirs.at(i), S_IFREG, files[i] );
+        ScanPath( scanpath+dirs.at(i), S_IFREG, files[i] );
 
         /* Check for good data files */
-        episodes[i] = VerifyChecksums( md5list, dirs.at(i), files.at(i) );
+        episodes[i] = VerifyChecksums( md5list, scanpath+dirs.at(i), files.at(i) );
         if (episodes[i] < 0)
         {
             dirs.erase( dirs.begin()+i );
@@ -125,7 +130,7 @@ int32_t RunFrontend( void )
         else
         {
             /* Convert and cache the data */
-            result = LoadData( episodes[i], dirs.at(i).c_str() );
+            result = LoadData( episodes[i], string(scanpath+dirs.at(i)).c_str() );
 
             CloseData();
         }
@@ -158,7 +163,7 @@ int32_t RunFrontend( void )
             }
             else
             {
-                CatacombMain( episodes[sel], dirs.at(sel).c_str() );
+                CatacombMain( episodes[sel], string(scanpath+dirs.at(sel)).c_str() );
             }
         }
 

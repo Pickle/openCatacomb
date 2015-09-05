@@ -59,7 +59,7 @@
 
 #define TITLE           "openCatacomb"
 #define VERSION         1.0
-#define OC_COPYRIGHT    "Copyright (C) 2014 Scott Smith"
+#define OC_COPYRIGHT    "Copyright (C) 2015 Scott Smith"
 #define CATA_COPYRIGHT  "Copyright (C) 1993-2014 Flat Rock Software"
 #define SELECTOR        "->"
 #define STRSIZE         256

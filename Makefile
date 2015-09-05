@@ -16,7 +16,7 @@ BASE_LDFLAGS = -L$(LIBRARY) -lSDL_mixer -lSDL
 
 # Target compiler options
 ifeq ($(BUILDTARGET),PANDORA)
-PREFIX   = /data/devel/toolchains/pandora/arm-2011.09
+PREFIX   = $(PNDSDK)
 TOOLS    = bin
 TARGET   = arm-none-linux-gnueabi-
 OGLTYPE  = opengles2
@@ -27,7 +27,7 @@ BASE_FLAGS  += $(NEON) -DPANDORA
 LDFLAGS  = $(BASE_LDFLAGS) -lpng12 -lz -ltiff -lmad -ljpeg -lts -lm
 else
 ifeq ($(BUILDTARGET),CAANOO)
-PREFIX   = /data/devel/toolchains/caanoo/GPH_SDK
+PREFIX   = $(CAANOOSDK)
 TOOLS    = tools/gcc-4.2.4-glibc-2.7-eabi/bin
 TARGET   = arm-gph-linux-gnueabi-
 OGLTYPE  = opengles1
@@ -37,7 +37,7 @@ BASE_FLAGS  += -DCAANOO
 LDFLAGS  = $(BASE_LDFLAGS) -lpng12 -lz
 else
 ifeq ($(BUILDTARGET),WIZ)
-PREFIX   = /data/devel/toolchains/openwiz/arm-openwiz-linux-gnu
+PREFIX   = $(WIZSDK)
 TOOLS    = bin
 TARGET   = arm-openwiz-linux-gnu-
 OGLTYPE  = opengles1
@@ -45,6 +45,16 @@ INCLUDE  = $(PREFIX)/include
 LIBRARY  = $(PREFIX)/lib
 BASE_FLAGS  += -DWIZ
 LDFLAGS  = $(BASE_LDFLAGS) -lpng12 -lz -lmad -lvorbisidec
+else
+ifeq ($(BUILDTARGET),GCW)
+PREFIX   = $(GCWSDK)
+TOOLS    = bin
+TARGET   = mipsel-gcw0-linux-uclibc-
+OGLTYPE  = opengles1
+INCLUDE  = $(PREFIX)/mipsel-gcw0-linux-uclibc/sysroot/usr/include
+LIBRARY  = $(PREFIX)/mipsel-gcw0-linux-uclibc/sysroot/usr/lib
+BASE_FLAGS  += -DGCW
+LDFLAGS  = $(BASE_LDFLAGS)
 else
 ifeq ($(BUILDTARGET),WIN32)
 PREFIX   = /usr
@@ -64,12 +74,13 @@ OGLTYPE  = opengles2
 INCLUDE  = $(PREFIX)/include
 LIBRARY  = $(PREFIX)/lib
 LDFLAGS  = $(BASE_LDFLAGS)
-endif # pandora
-endif # caanoo
-endif # wiz
-endif # win32
+endif # WIN32
+endif # GCW
+endif # WIZ
+endif # CAANOO
+endif # PANDORA
 
-# Assign includes
+# Assign includes 
 BASE_FLAGS  += -Isrc -I$(INCLUDE) -I$(INCLUDE)/SDL
 
 # Source files
@@ -112,24 +123,30 @@ else # GLES Configs
 
 ifeq ($(OGLTYPE),opengles1)
 
-ifeq ($(BUILDTARGET),PANDORA)
 CC_SRCS     += eglport.c
-BASE_FLAGS  += -DUSE_GLES1 -DUSE_EGL_RAW -I$(INCLUDE)/GLES -I$(INCLUDE)/EGL
+BASE_FLAGS  += -DUSE_GLES1 -I$(INCLUDE)/GLES -I$(INCLUDE)/EGL
+
+ifeq ($(BUILDTARGET),PANDORA)
+BASE_FLAGS  += -DUSE_EGL_RAW 
 LDFLAGS     += -lGLES_CM -lIMGegl -lEGL -lsrv_um -lX11 -lXau -lXdmcp 
 else
 ifeq ($(BUILDTARGET),CAANOO)
-CC_SRCS     += eglport.c gph.c
-BASE_FLAGS  += -DUSE_GLES1 -DUSE_EGL_RAW -I$(INCLUDE)/OpenGLES -I$(INCLUDE)/EGL
+CC_SRCS     += gph.c
+BASE_FLAGS  += -DUSE_EGL_RAW -I$(INCLUDE)/OpenGLES
 LDFLAGS     += -lopengles_lite
 else
 ifeq ($(BUILDTARGET),WIZ)
-CC_SRCS     += eglport.c gph.c
-BASE_FLAGS  += -DUSE_GLES1 -DUSE_EGL_RAW -I$(INCLUDE)/GLES -I$(INCLUDE)/EGL
+CC_SRCS     += gph.c
+BASE_FLAGS  += -DUSE_EGL_RAW
 LDFLAGS     += -lopengles_lite -lglport
 else
-CC_SRCS     += eglport.c
-BASE_FLAGS  += -DUSE_GL1 -DUSE_GLES1 -DUSE_EGL_SDL -I$(INCLUDE)/GLES2 -I$(INCLUDE)/EGL
+ifeq ($(BUILDTARGET),GCW)
+BASE_FLAGS  += -DUSE_EGL_RAW
+LDFLAGS     += -lGLESv1_CM -lEGL 
+else
+BASE_FLAGS  += -DUSE_EGL_SDL
 LDFLAGS     += -lGLESv1_CM -lEGL -lX11
+endif # GCW
 endif # WIZ
 endif # CAANOO
 endif # PANDORA
@@ -137,14 +154,20 @@ endif # PANDORA
 else
 ifeq ($(OGLTYPE),opengles2)
 
-ifeq ($(BUILDTARGET),PANDORA)
 CC_SRCS     += eglport.c shader.c
-BASE_FLAGS  += -DUSE_GL2 -DUSE_GLES2 -DUSE_EGL_RAW -DUSE_FBO -I$(INCLUDE)/GLES2 -I$(INCLUDE)/EGL
+BASE_FLAGS  += -DUSE_GL2 -DUSE_GLES2 -DUSE_FBO  -I$(INCLUDE)/GLES2 -I$(INCLUDE)/EGL
+
+ifeq ($(BUILDTARGET),PANDORA)
+BASE_FLAGS  += -DUSE_EGL_RAW
 LDFLAGS     += -lGLESv2 -lIMGegl -lEGL -lsrv_um -lX11 -lXau -lXdmcp 
 else
-CC_SRCS     += eglport.c shader.c
-BASE_FLAGS  += -DUSE_GL2 -DUSE_GLES2 -DUSE_EGL_SDL -DUSE_FBO -I$(INCLUDE)/GLES2 -I$(INCLUDE)/EGL
+ifeq ($(BUILDTARGET),GCW)
+BASE_FLAGS  += -DUSE_EGL_RAW
+LDFLAGS     += -lGLESv2 -lEGL
+else
+BASE_FLAGS  += -DUSE_EGL_SDL
 LDFLAGS     += -lGLESv2 -lEGL -lX11
+endif # GCW
 endif # PANDORA
 
 endif # opengles2

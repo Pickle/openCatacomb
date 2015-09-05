@@ -1533,14 +1533,13 @@ void Reset( void )
     do {
         GetKey( &ch, True );
 
-        if (ch==SDLK_y) {
+        if (ch==inputmaps[input_select].key) {
             gamexit=killed;
             playdone=True;
         } else {
             SDL_Delay(10);
         }
-
-    } while (ch != SDLK_y && ch != SDLK_n);
+    } while ((ch != inputmaps[input_back].key) && (ch != inputmaps[input_select].key));
 }
 
 /*
@@ -1568,19 +1567,18 @@ void QuitGame( void )
     do {
         GetKey( &ch, True );
 
-        if (ch==SDLK_y) {
+        if (ch==inputmaps[input_select].key) {
             SystemShutdown();
             exit(0);
         } else {
-            SDL_Delay(5);
+            SDL_Delay(10);
         }
-
-    } while (ch != SDLK_y && ch != SDLK_n);
+    } while ((ch != inputmaps[input_back].key) && (ch != inputmaps[input_select].key));
 }
 
 void SaveGame( void )
 {
-    char filename[15];
+    char filename[STRSIZE];
     FILE *file = NULL;
 
     DrawWindowExpand( 22, 4 );
@@ -1592,10 +1590,14 @@ void SaveGame( void )
         return;
     }
 
+#if defined(GCW) || defined(WIZ) || defined(CAANOO)
+    ch = SDLK_1;
+#else
     Print( "Save as game #(1-9):" );
     while (ch<SDLK_1 || ch>SDLK_9) {
         GetKey( &ch, False );
     }
+#endif
 
     snprintf( filename, sizeof(filename), "%s/GAME%d.%s", pathdata, ch-SDLK_0, filelist[episode][file_ext] );
 
@@ -1606,18 +1608,23 @@ void SaveGame( void )
         fclose( file );
 
         Print( "]Game exists,]overwrite (Y/N)?" );
-        while (ch != SDLK_y && ch != SDLK_n) {
+        do {
             GetKey( &ch, False );
-            if (ch == SDLK_n) {
+
+            if (ch==inputmaps[input_back].key) {
                 return;
+            } else {
+                SDL_Delay(10);
             }
-        }
+        } while ((ch != inputmaps[input_back].key) && (ch != inputmaps[input_select].key));
     }
 
     file = fopen( filename, "wb" );
 
     if (file == NULL)
     {
+        printf( "Failed to open file '%s' code: '%d'\n", filename, errno );
+
         Print( "]Error opening file" );
         GetKey( &ch, False );
         return;
@@ -1645,15 +1652,19 @@ void SaveGame( void )
 
 void LoadGame( void )
 {
-    char filename[15];
+    char filename[STRSIZE];
     FILE *file = NULL;
 
     DrawWindowExpand( 22, 4 );
-    Print( "Load game #(1-9):" );
 
+#if defined(GCW) || defined(WIZ) || defined(CAANOO)
+    ch = SDLK_1;
+#else
+    Print( "Load game #(1-9):" );
     while (ch<SDLK_1 || ch>SDLK_9) {
         GetKey( &ch, False );
     }
+#endif
 
     snprintf( filename, sizeof(filename), "%s/GAME%d.%s", pathdata, ch-SDLK_0, filelist[episode][file_ext] );
 
